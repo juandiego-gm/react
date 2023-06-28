@@ -59,17 +59,6 @@ const styles = StyleSheet.create({
         backgroundColor: "E8EAED",
         marginTop: StatusBar.currentHeight || 0,
         display: "flex"
-    }, taskWrapper: {
-        paddingTop: 80,
-        paddingHorizontal: 20,
-        height: 980
-    }, sectionTitle: {
-        fontSize: 24,
-        fontWeight: "bold"
-    }, items: {
-
-    }, periitem: {
-
     }, centeredView: {
         flex: 1,
         justifyContent: "center",

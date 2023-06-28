@@ -35,7 +35,6 @@ const ListComponent = () => {
     //     )
     // }
     const Item = ({ task, i }) => {
-        console.log("task" + task);
         return (
             <TouchableOpacity style={styles.periten} key={i} onPress={() => getProfile(task)}>
                 <Task task={task} />

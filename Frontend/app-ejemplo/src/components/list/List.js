@@ -1,14 +1,18 @@
-import React, {useEffect, useState} from "react";
-import {FlatList, SafeAreaView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import React, { useEffect, useState } from "react";
+import { Alert, FlatList, Modal, SafeAreaView, StatusBar, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Task from "./Task";
+import Profile from "./Profile";
 const ListComponent = () => {
 
-    const [taskItems, setTaskItems] = useState([])
+    const [taskItems, setTaskItems] = useState([]);
+    const [showProfile, setShowProfile] = useState(false);
+    const [task, setTask] = useState([]);
 
     useEffect(() => {
         fetchData()
     }, [])
-    const fetchData= async () => {
+
+    const fetchData = async () => {
         try {
             const response = await fetch("https://api.unsplash.com/photos/?client_id=ZXjOAAdwefwfYGtyhjJmAerkWnGDxNNnEwTlnHkSqk4")
             const jsonData = await response.json()
@@ -18,23 +22,37 @@ const ListComponent = () => {
         }
     }
 
-    const ItemList = ({ task, i }) => {
-        const getProfile = (task) => {
-
-        }
+    // const ItemList = ({ task, i }) => {
+    //     return (
+    //         <View>
+    //             <Text>
+    //                 {i}
+    //             </Text>
+    //             <TouchableOpacity style={styles.periten} key={i} onPress={() => getProfile(task)}>
+    //                 <Task task={task} />
+    //             </TouchableOpacity>
+    //         </View>
+    //     )
+    // }
+    const Item = ({ task, i }) => {
+        console.log("task" + task);
         return (
-            <View>
-                <Text>
-                    {i}
-                </Text>
-                <TouchableOpacity style={styles.periten} key={i} onPress={() => getProfile(task)}>
-                    <Task task={task}/>
-                </TouchableOpacity>
-            </View>
+            <TouchableOpacity style={styles.periten} key={i} onPress={() => getProfile(task)}>
+                <Task task={task} />
+            </TouchableOpacity>
         )
     }
 
-    return (taskItems && taskItems.length > 0 ?
+    const closeProfile = () => {
+        setShowProfile(!showProfile)
+    }
+
+    const getProfile = (task) => {
+        setShowProfile(true);
+        setTask(task);
+    }
+
+    return (taskItems && taskItems.length> 0 ?
         <View style={styles.container}>
             <View style={styles.taskWrapper}>
                 <Text style={styles.sectionTitle}>
@@ -42,20 +60,79 @@ const ListComponent = () => {
                 </Text>
                 <View style={styles.items}>
                     <SafeAreaView>
-                        <FlatList data={taskItems} renderItem={ ({item, i}) => (<ItemList task={item} i={i} />) } >
+                        <FlatList data={taskItems} renderItem={({ item, i }) => (<Item task={item} i={i} />)} >
                         </FlatList>
                     </SafeAreaView>
                 </View>
             </View>
-        </View> :
-            <View>
-                <Text>
-                    No hay datos
-                </Text>
-            </View>
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={showProfile}
+                onRequestClose={() => {
+                    Alert.alert("modla has been closed");
+                    closeProfile();
+                }}
+            >
+                <View style={styles.centeredView}>
+                    <View style={styles.modalView}>
+                        <Text style={styles.modalText}>
+                            <Profile task={task} closeProfile={closeProfile} />
+                        </Text>
+                    </View>
+                </View>
+            </Modal>
+        </View>:
+        <View>
+            <Text>
+                No hay datos
+            </Text>
+        </View>
     )
 }
-const styles = StyleSheet.create({
 
+const styles = StyleSheet.create({
+    container: {
+        backgroundColor: "E8EAED",
+        marginTop: StatusBar.currentHeight || 0,
+        display: "flex"
+    }, taskWrapper: {
+        paddingTop: 80,
+        paddingHorizontal: 20,
+        height: 980
+    }, sectionTitle: {
+        fontSize: 24,
+        fontWeight: "bold"
+    }, items: {
+
+    }, periitem: {
+
+    }, centeredView: {
+        flex: 1,
+        justifyContent: "center",
+        alignContent: "center",
+        marginTop: 22
+    }, modalView: {
+        margin: 0,
+        backgroundColor: "white",
+        borderRadius: 20,
+        padding: 35,
+        alignItems: "center",
+        shadowColor: "#000",
+        width: "100%",
+        height: 300,
+        shadowOffset: {
+            width: 0,
+            height: 2
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5
+    }, modalText: {
+        marginBottom: 15,
+        textAlign: "center",
+        width: "100%"
+    }
 })
-export default ListComponent
+
+export default ListComponent;

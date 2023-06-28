@@ -1,5 +1,5 @@
 import React from "react";
-import { Linking, StyleSheet, View, Image, Text } from "react-native";
+import { Linking, StyleSheet, View, Image, Text, Button } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 
 const instagram_username = <Icon name="instagram" size={30} color="black" />
@@ -38,11 +38,7 @@ const Profile = ({ task, closeProfile }) => {
                     <Image style={styles.image2} source={require('../../../assets/Like.png')} />
                 </View>
             </View>
-            <Text style={{ color: "blue" }} onPress={() => {
-                closeProfile()
-            }}>
-                CERRAR
-            </Text>
+            <Button title="Cerrar" onPress={closeProfile} />
         </View>
     )
 }

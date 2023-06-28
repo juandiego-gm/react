@@ -3,6 +3,8 @@ import {Image, Linking, StyleSheet, Text, View} from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
 const tw = <Icon name="twitter" size={30} color="black"/>
 const fb = <Icon name="facebook" size={30} color="black"/>
+const instagram = <Icon name="instagram" size={30} color="black"/>
+const linkedin = <Icon name="linkedin" size={30} color="black"/>
 //const twitter = <Icon name=
 
 const ProfileCard = () => {
@@ -28,6 +30,12 @@ const ProfileCard = () => {
                 </Text>
                 <Text style={[{ color: "blue" }, styles.hover]} onPress={() =>  Linking.openURL("https://www.facebook.com")}>
                     {fb}
+                </Text>
+                <Text style={[{ color: "blue" }, styles.hover]} onPress={() =>  Linking.openURL("https://www.instagram.com/")}>
+                    {instagram}
+                </Text>
+                <Text style={[{ color: "blue" }, styles.hover]} onPress={() =>  Linking.openURL("https://ec.linkedin.com/")}>
+                    {linkedin}
                 </Text>
             </View>
         </View>

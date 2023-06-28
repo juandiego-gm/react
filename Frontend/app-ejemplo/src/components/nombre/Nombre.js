@@ -4,14 +4,14 @@ import { Alert, Modal, StatusBar, StyleSheet, TextInput, Button, Text, View } fr
 const NombreComponent = () => {
     const [nombre, setNombre] = useState([]);
     const [apellido, setApellido] = useState([]);
-    const [showProfile, setShowProfile] = useState(false);
+    const [showMessage, setShowMessage] = useState(false);
 
-    const closeProfile = () => {
-        setShowProfile(!showProfile)
+    const closeMessage = () => {
+        setShowMessage(!showMessage)
     }
 
-    const getProfile = () => {
-        setShowProfile(true);
+    const getMessage = () => {
+        setShowMessage(true);
     }
 
     return (
@@ -29,15 +29,15 @@ const NombreComponent = () => {
                     value={apellido}
                     onChangeText={setApellido}
                 />
-                <Button title="Mostrar mensaje" onPress={getProfile} />
+                <Button title="Mostrar mensaje" onPress={getMessage} />
             </View>
             <Modal
                 animationType="slide"
                 transparent={true}
-                visible={showProfile}
+                visible={showMessage}
                 onRequestClose={() => {
                     Alert.alert("Modal has been closed");
-                    closeProfile();
+                    closeMessage();
                 }}
             >
                 <View style={styles.centeredView}>
@@ -45,7 +45,7 @@ const NombreComponent = () => {
                         <Text style={styles.modalText}>
                             Bienvenido {nombre} {apellido}
                         </Text>
-                        <Button title="Cerrar" onPress={closeProfile} />
+                        <Button title="Cerrar" onPress={closeMessage} />
                     </View>
                 </View>
             </Modal>

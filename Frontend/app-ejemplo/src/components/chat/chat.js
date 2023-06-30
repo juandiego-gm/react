@@ -2,11 +2,12 @@ import { View, StyleSheet, Text, TextInput, Button, Alert, Modal } from "react-n
 import React, { useState } from "react";
 import axios from "axios";
 
+
 const Chat = () => {
     const [respuestas, setRespuestas] = useState([]);
     const [textInput, setTextInput] = useState("");
     const apiUrl = 'https://api.openai.com/v1/engines/text-davinci-002/completions';
-    const apiKey = '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';
+    const apiKey = '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';
     const [showMessage, setShowMessage] = useState(false);
 
     const closeMessage = () => {
@@ -18,6 +19,7 @@ const Chat = () => {
     }
 
     const sendMessageToChatGPT = async () => {
+        setTextInput("");
         try {
             const prompt = textInput;
             const response = await axios.post(apiUrl, {
@@ -56,11 +58,11 @@ const Chat = () => {
             <View style={styles.inputContainer}>
                 <TextInput
                     style={styles.input}
-                    placeholder="Realice una pregunta"
+                    placeholder="Ingrese un texto"
                     value={textInput}
                     onChangeText={setTextInput}
                 />
-                <Button title="Preguntar" onPress={sendMessageToChatGPT} />
+                <Button title="Enviar" onPress={sendMessageToChatGPT} />
             </View>
 
             <View style={styles.respuestasContainer}>

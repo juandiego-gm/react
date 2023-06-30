@@ -1,8 +1,6 @@
 import React from "react";
-import {Text, View} from "react-native";
 import {createBottomTabNavigator} from "@react-navigation/bottom-tabs";
 import Menu from "./components/home/Menu";
-import { MaterialCommunityIcons } from '@expo/vector-icons';
 import ListComponent from "./components/list/List";
 import NombreComponent from "./components/nombre/Nombre";
 import ChatComponent from "./components/chat/chat";
@@ -24,8 +22,8 @@ const navigation = () => {
               tabBarLabel: "Nombre",
           }}>
           </Tab.Screen>
-          <Tab.Screen name="Chat" component={ChatComponent} options={{
-              tabBarLabel: "Chat",
+          <Tab.Screen name="OpenAI" component={ChatComponent} options={{
+              tabBarLabel: "OpenAI",
           }}>
           </Tab.Screen>
       </Tab.Navigator>

@@ -1,54 +1,51 @@
 import { View, StyleSheet, Text, TextInput, Button, Alert, Modal } from "react-native";
 import React, { useState } from "react";
-import axios from "axios";
+import { Configuration, OpenAIApi } from "openai";
 
+const apiKey = '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';
 
 const Chat = () => {
+
+    const configuration = new Configuration({
+        organization: "org-wynEPyJcGvJfZHKQl1lpwVCY",
+        apiKey: apiKey,
+    });
+    const openai = new OpenAIApi(configuration);
+
     const [respuestas, setRespuestas] = useState([]);
+    const [tokens, setTokens] = useState([]);
     const [textInput, setTextInput] = useState("");
-    const apiUrl = 'https://api.openai.com/v1/engines/text-davinci-002/completions';
-    const apiKey = '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';
-    const [showMessage, setShowMessage] = useState(false);
 
-    const closeMessage = () => {
-        setShowMessage(!showMessage)
-    }
-
-    const getMessage = () => {
-        setShowMessage(true);
-    }
 
     const sendMessageToChatGPT = async () => {
         setTextInput("");
-        try {
-            const prompt = textInput;
-            const response = await axios.post(apiUrl, {
-                prompt: prompt,
-                max_tokens: 100,
-                temperature: 0.5,
-            }, {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${apiKey}`,
-                },
-            });
+        setRespuestas(null);
 
+        // const prompt = `Cliente: ${textInput}\nAsistente: Cuenta la cantidad de cada vocal en el siguiente texto: ${textInput}`;
 
-            if (response.data.choices && response.data.choices.length > 0) {
-                const botReply = response.data.choices[0].text.trim();
-                console.log(botReply);
-                setRespuestas([...respuestas, botReply]);
-            } else {
-                console.log('No se encontró una respuesta válida del bot');
-            }
-            setTextInput("");
-        } catch (error) {
-            if (error.response && error.response.status === 429) {
-                console.error('Error al llamar a la API de ChatGPT: Se ha excedido la cuota');
-                getMessage();
-            } else {
-                console.error('Error al llamar a la API de ChatGPT:', error);
-            }
+        const response = await openai.createChatCompletion({
+            model: "gpt-3.5-turbo",
+            messages: [
+                { "role": "system", "content": `Eres un contador de vocales, cuando recibas un texto debes contar las vocales de ese texto.
+                E.G
+                juan = 2 vocales
+                Aeropuerto = 6 vocales
+                zapato = 3 vocales` },
+                { role: "user", content: `${textInput}` }],
+            temperature: 0.5,
+            max_tokens: 50,
+            stop: [" Human:", " AI:"],
+        });
+
+        console.log(response);
+        if (response.data.choices && response.data.choices.length > 0) {
+            const botReply = response.data.choices[0].message.content;
+            setTokens(response.data.usage.total_tokens);
+            console.log(botReply);
+            console.log(response.data.usage.total_tokens);
+            setRespuestas(`${botReply}`);
+        } else {
+            console.log('No se encontró una respuesta válida del bot');
         }
     };
 
@@ -66,30 +63,9 @@ const Chat = () => {
             </View>
 
             <View style={styles.respuestasContainer}>
-                {respuestas.map((respuesta, index) => (
-                    <Text key={index} style={styles.respuesta}>{respuesta}</Text>
-                ))}
+                <Text style={styles.respuesta}>{respuestas}</Text>
             </View>
-
-            <Modal
-                animationType="slide"
-                transparent={true}
-                visible={showMessage}
-                onRequestClose={() => {
-                    Alert.alert("Modal has been closed");
-                    closeMessage();
-                }}
-            >
-                <View style={styles.centeredView}>
-                    <View style={styles.modalView}>
-                        <Text style={styles.modalText}>
-                            Error al llamar a la API de ChatGPT: Se ha excedido la cuota
-                        </Text>
-                        <Button title="Cerrar" onPress={closeMessage} />
-                    </View>
-                </View>
-            </Modal>
-
+            <Text style={styles.message}>Tokens utilizados: {tokens}</Text>
         </View>
 
     );
@@ -120,7 +96,7 @@ const styles = StyleSheet.create({
     respuestasContainer: {
         height: 200,
         width: 400,
-        alignItems: 'center',
+        alignItems: 'left',
         borderWidth: 1, // Ancho del borde
         borderColor: 'gray', // Color del borde
         borderRadius: 5, // Radio de borde

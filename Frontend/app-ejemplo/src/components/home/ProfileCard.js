@@ -1,11 +1,13 @@
 import React from "react";
-import {Image, Linking, StyleSheet, Text, View} from "react-native";
+import { Image, Linking, StyleSheet, Text, View } from "react-native";
 import Icon from "react-native-vector-icons/FontAwesome";
-const tw = <Icon name="twitter" size={30} color="black"/>
-const fb = <Icon name="facebook" size={30} color="black"/>
-const instagram = <Icon name="instagram" size={30} color="black"/>
-const linkedin = <Icon name="linkedin" size={30} color="black"/>
-const tiktok = <Icon name="tiktok" size={30} color="black"/>
+// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+// import { faTiktok } from '@fortawesome/free-brands-svg-icons';
+const tw = <Icon name="twitter" size={30} color="black" />
+const fb = <Icon name="facebook" size={30} color="black" />
+const instagram = <Icon name="instagram" size={30} color="black" />
+const linkedin = <Icon name="linkedin" size={30} color="black" />
+// const tk = <FontAwesomeIcon icon={faTiktok} style={{fontSize: '30px', color: 'black'}} />
 
 
 const ProfileCard = () => {
@@ -24,21 +26,21 @@ const ProfileCard = () => {
                 </Text>
             </View>
             <View style={styles.buttonContainer}>
-                <Text style={[{ color: "blue" }, styles.hover]} onPress={() =>  Linking.openURL("https://www.twitter.com")}>
+                <Text style={[{ color: "blue" }, styles.hover]} onPress={() => Linking.openURL("https://www.twitter.com")}>
                     {tw}
                 </Text>
-                <Text style={[{ color: "blue" }, styles.hover]} onPress={() =>  Linking.openURL("https://www.facebook.com")}>
+                <Text style={[{ color: "blue" }, styles.hover]} onPress={() => Linking.openURL("https://www.facebook.com")}>
                     {fb}
                 </Text>
-                <Text style={[{ color: "blue" }, styles.hover]} onPress={() =>  Linking.openURL("https://www.instagram.com/")}>
+                <Text style={[{ color: "blue" }, styles.hover]} onPress={() => Linking.openURL("https://www.instagram.com/")}>
                     {instagram}
                 </Text>
-                <Text style={[{ color: "blue" }, styles.hover]} onPress={() =>  Linking.openURL("https://ec.linkedin.com/")}>
+                <Text style={[{ color: "blue" }, styles.hover]} onPress={() => Linking.openURL("https://ec.linkedin.com/")}>
                     {linkedin}
                 </Text>
-                <Text style={[{ color: "blue" }, styles.hover]} onPress={() =>  Linking.openURL("https://www.tiktok.com/")}>
-                    {tiktok}
-                </Text>
+                {/* <Text style={[{ color: "blue" }, styles.hover]} onPress={() => Linking.openURL("https://www.tiktok.com/")}>
+                    {tk}
+                </Text> */}
             </View>
         </View>
     )

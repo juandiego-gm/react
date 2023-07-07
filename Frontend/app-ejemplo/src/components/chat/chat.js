@@ -1,8 +1,10 @@
 import { View, StyleSheet, Text, TextInput, Button, Alert, Modal } from "react-native";
 import React, { useState } from "react";
 import { Configuration, OpenAIApi } from "openai";
+import { CONTADOR_VOCALES, CONVERTIDOR_BINARIO, FACTORIAL } from "./constantes";
 
-const apiKey = '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';
+const apiKey = '';
+
 
 const Chat = () => {
 
@@ -21,16 +23,12 @@ const Chat = () => {
         setTextInput("");
         setRespuestas(null);
 
-        // const prompt = `Cliente: ${textInput}\nAsistente: Cuenta la cantidad de cada vocal en el siguiente texto: ${textInput}`;
-
         const response = await openai.createChatCompletion({
             model: "gpt-3.5-turbo",
             messages: [
-                { "role": "system", "content": `Eres un contador de vocales, cuando recibas un texto debes contar las vocales de ese texto.
-                E.G
-                juan = 2 vocales
-                Aeropuerto = 6 vocales
-                zapato = 3 vocales` },
+                {
+                    "role": "system", "content": FACTORIAL
+                },
                 { role: "user", content: `${textInput}` }],
             temperature: 0.5,
             max_tokens: 50,
@@ -38,12 +36,12 @@ const Chat = () => {
         });
 
         console.log(response);
+
         if (response.data.choices && response.data.choices.length > 0) {
             const botReply = response.data.choices[0].message.content;
-            setTokens(response.data.usage.total_tokens);
-            console.log(botReply);
-            console.log(response.data.usage.total_tokens);
+            setTokens(response.data.usage.completion_tokens);
             setRespuestas(`${botReply}`);
+            
         } else {
             console.log('No se encontró una respuesta válida del bot');
         }
@@ -51,22 +49,27 @@ const Chat = () => {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.message}>Bienvenido al chat</Text>
-            <View style={styles.inputContainer}>
-                <TextInput
-                    style={styles.input}
-                    placeholder="Ingrese un texto"
-                    value={textInput}
-                    onChangeText={setTextInput}
-                />
-                <Button title="Enviar" onPress={sendMessageToChatGPT} />
-            </View>
+            <View>
+                <Text style={styles.message}>CHAT OPENAI</Text>
+                <View style={styles.inputContainer}>
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Ingrese un texto "
+                        value={textInput}
+                        onChangeText={setTextInput}
+                        onSubmitEditing={sendMessageToChatGPT}
+                    />
+                    <Button title="Enviar" onPress={sendMessageToChatGPT} />
+                </View>
 
-            <View style={styles.respuestasContainer}>
-                <Text style={styles.respuesta}>{respuestas}</Text>
+                <View style={styles.respuestasContainer}>
+                    <Text style={styles.respuesta}>{respuestas}</Text>
+                    <Text style={styles.informacion}>Tokens utilizados: {tokens}</Text>
+                </View>
             </View>
-            <Text style={styles.message}>Tokens utilizados: {tokens}</Text>
         </View>
+
+
 
     );
 };
@@ -93,15 +96,22 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         marginBottom: 10,
     },
+    informacion: {
+        fontSize: 14,
+        fontWeight: 100,
+        marginLeft: 2
+    },
     respuestasContainer: {
         height: 200,
         width: 400,
         alignItems: 'left',
-        borderWidth: 1, // Ancho del borde
-        borderColor: 'gray', // Color del borde
-        borderRadius: 5, // Radio de borde
-        padding: 10, // Espacio interno alrededor de las respuestas
-        marginTop: 10, // Espacio superior para separar del input
+        borderWidth: 1,
+        borderColor: 'gray', 
+        borderRadius: 5, 
+        padding: 10, 
+        marginTop: 10,
+        flexDirection: 'column',
+        justifyContent: 'space-between',
     },
     respuesta: {
         fontSize: 14,
@@ -112,29 +122,6 @@ const styles = StyleSheet.create({
         alignItems: "center",
         backgroundColor: "rgba(0, 0, 0, 0.5)", // Fondo oscuro semitransparente
     },
-    modalView: {
-        margin: 20,
-        backgroundColor: "white",
-        borderRadius: 20,
-        padding: 20,
-        alignItems: "center",
-        shadowColor: "#000",
-        width: "80%", // Ancho del modal
-        maxWidth: 450, // Máximo ancho del modal
-        height: "100", // Altura del modal
-        maxHeight: 200, // Máxima altura del modal
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 4,
-        elevation: 5,
-    }, modalText: {
-        marginBottom: 15,
-        textAlign: "center",
-        width: "100%"
-    }
 });
 
 
